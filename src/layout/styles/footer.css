@@ -1,0 +1,12 @@
+.mainFooter{
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+    background-color: var(--light-cold-4);
+    color: var(--light-cold-1);
+
+}
