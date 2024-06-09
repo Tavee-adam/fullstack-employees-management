@@ -1,9 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import Create from './pages/create/page.tsx'
-import List from './pages/list/page.tsx'
-import Update from './pages/update/page.tsx'
+import Create from './pages/employee/create/page.tsx'
+import List from './pages/employee/list/page.tsx'
+import Update from './pages/employee/update/page.tsx'
+import { Provider } from "react-redux";
+import { store } from "./contexts/store.ts"
 import {
   createBrowserRouter,
   RouterProvider, createRoutesFromElements,
@@ -15,7 +17,8 @@ const router = createBrowserRouter(
     <Route path='/' element={<App />}>
       <Route path="/create" element={<Create />} />
       <Route path="/update" element={<Update />} />
-      <Route index path="/list" element={<List />} />
+      <Route index path="/list/:id" element={<List />} />
+      <Route path='*' element={<h2>NO PAGE</h2>}></Route>
     </Route>
   )
 )
@@ -23,6 +26,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 )

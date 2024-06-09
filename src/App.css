@@ -4,6 +4,7 @@
   margin: 0;
   padding: 0;
   display: flex;
+  /* justify-content: space-evenly; */
   flex-direction: column;
   background-color: var(--light-cold-2);
 }

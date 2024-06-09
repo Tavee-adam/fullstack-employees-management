@@ -1,0 +1,9 @@
+.updateMain{
+    padding: 2% 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header{
+    color: var(--light-cold-4);
+}

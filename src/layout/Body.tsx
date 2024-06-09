@@ -4,7 +4,7 @@ import './styles/body.css'
 const Body = () => {
     return (
         <main className='mainBody'>
-            <Container maxWidth="xl">
+            <Container  maxWidth="xl">
                 <Outlet />
             </Container>
 

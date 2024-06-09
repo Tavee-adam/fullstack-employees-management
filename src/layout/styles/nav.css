@@ -6,9 +6,9 @@
     align-items: center;
     background-color: var(--light-cold-4);
     color: var(--light-cold-1);
-    box-shadow: 12px 10px 25px -3px rgba(58,117,138,0.64);
+    /* box-shadow: 12px 10px 25px -3px rgba(58,117,138,0.64);
     -webkit-box-shadow: 12px 10px 25px -3px rgba(58,117,138,0.64);
-    -moz-box-shadow: 12px 10px 25px -3px rgba(58,117,138,0.64);
+    -moz-box-shadow: 12px 10px 25px -3px rgba(58,117,138,0.64); */
 }
 .logo{
     width: 30%;
@@ -17,7 +17,7 @@
 }
 
 .linklist{
-    width: 70%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -29,15 +29,36 @@
 
 
 .link{
-    width: 20%;
+    width: 10%;
     color: var(--light-cold-1);
     text-decoration: none; 
     /* margin-right: 5%; */
 }
 
+.thisLink{
+    width: 10%;
+    color: var(--light-cold-5);
+    text-decoration: none; 
+    /* margin-right: 5%; */
+}
+
 .link:hover{
-    width: 13%;
-    color: var(--light-cold-3);
+    width: 10%;
+    color: var(--light-cold-5);
     text-decoration: none;
-    margin-right: 5%;
+    /* margin-right: 5%; */
 } 
+
+.burgerIcon{
+   display: none;
+   
+}
+
+@media  screen and (max-width: 600px) {
+    .link , .thisLink{
+        display: none;
+    }
+    .burgerIcon{
+        display: block;
+     }
+}
