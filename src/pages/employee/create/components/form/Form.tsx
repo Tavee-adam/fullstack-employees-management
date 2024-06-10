@@ -44,7 +44,8 @@ const Form = () => {
         try {
             data.birth = dates!.locale('th').format('YYYY-MM-DD')
             data.idCardExp = expDate!.locale('th').format('YYYY-MM-DD')
-            const res = await axios.post('http://localhost:3000/api/v1/employee/', data)
+            const endpoint = import.meta.env.VITE_API;
+            const res = await axios.post(endpoint, data)
             console.log(res)
         } catch (error) {
             console.log(error)
@@ -110,7 +111,7 @@ const Form = () => {
                         value={dates}
                         required
                         {...register(`birth`, {
-                            required: true
+                            required: false
                         })}
                         onChange={e => setDates(e)}
                     />
@@ -163,7 +164,7 @@ const Form = () => {
                         timezone='Asia/Bangkok'
                         value={expDate}
                         {...register('idCardExp', {
-                            required: true
+                            required: false
                         })}
                         onChange={e => setExpDate(e)}
                     />

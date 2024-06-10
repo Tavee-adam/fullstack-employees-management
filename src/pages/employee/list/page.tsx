@@ -20,7 +20,8 @@ const List = () => {
 
   const handleDeleteClick = (id: string | number) => () => {
     setIsLoading(true);
-    axios.delete(`http://localhost:3000/api/v1/employee/${id}`).then(res => {
+    const endpoint = import.meta.env.VITE_API;
+    axios.delete(`${endpoint}${id}`).then(res => {
       if (!res.data.id) {
         setIsLoading(false);
         setRows(rows.filter((row) => row.id !== id));
@@ -49,12 +50,6 @@ const List = () => {
     dayjs.extend(buddhistEra);
     dayjs.locale("th");
     const day = dayjs(value).format("DD MMMM BBBB");
-    // const date = day.date()
-    // const monthIndex: number = day.month()
-    // const year = day.year()
-
-    // const newValue = `${date} ${options[monthIndex].label} ${year}`
-
     return day
 
   }
@@ -188,8 +183,11 @@ const List = () => {
   useEffect(() => {
     const getAllEmployee = async () => {
       try {
+
         setIsLoading(true)
-        const res = await axios.get('http://localhost:3000/api/v1/employee/')
+        const endpoint = import.meta.env.VITE_API;
+
+        const res = await axios.get(endpoint)
 
 
         if (res.data) {

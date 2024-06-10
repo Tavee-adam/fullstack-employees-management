@@ -47,8 +47,8 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
         try {
             data.birth = dates!.locale('th').format('YYYY-MM-DD')
             data.idCardExp = expDate!.locale('th').format('YYYY-MM-DD')
-            console.log(data, ",,,,,")
-            const res = await axios.patch(`http://localhost:3000/api/v1/employee/${params.id}`, data)
+            const endpoint = import.meta.env.VITE_API;
+            const res = await axios.patch(`${endpoint}${params.id}`, data)
 
             console.log(res)
             setIsDisable(true)
@@ -63,8 +63,9 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
     }
     useForm({
         defaultValues: async () => {
-            const res = await axios.get(`http://localhost:3000/api/v1/employee/${params.id}`)
-            console.log(res.data, '<<<< 82')
+            const endpoint = import.meta.env.VITE_API;
+            const res = await axios.get(`${endpoint}${params.id}`)
+           
 
 
             if (res.data) {
