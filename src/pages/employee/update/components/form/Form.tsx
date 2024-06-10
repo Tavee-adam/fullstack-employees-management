@@ -12,47 +12,16 @@ import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import axios from 'axios';
-type FormInput = {
-    firstname: string;
-    lastname: string;
-    sex: string;
-    birth: string | null;
-    address: string;
-    subDistrict: string;
-    district: string;
-    province: string;
-    idCardExp: Dayjs | string;
-}
-
-
-interface Props {
-    setOpenSuccessNotify: () => void;
-    setOpenFailedNotify: () => void;
-}
-export const namePattern = /^[a-zA-Zก-ฮ]+$/;
-export const addressPattern = /^[a-zA-Zก-ฮ0-9\s,.-@]+$/;
+import { namePattern, addressPattern } from './constants/const'
+import { Props, FormInput } from './constants/type'
 
 
 const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
-    // const [sex, setSex] = useState('');
     const [isDisable, setIsDisable] = useState<boolean>(true)
     const [dates, setDates] = useState<Dayjs | null>(dayjs())
     const [expDate, setExpDate] = useState<Dayjs | null>(dayjs())
-    // const [values, setValues] = useState<FormInput>({
-    //     firstname: "",
-    //     lastname: "",
-    //     sex: "",
-    //     birth: "",
-    //     address: "",
-    //     subDistrict: "",
-    //     district: "",
-    //     province: "",
-    //     idCardExp: ""
-    // })
-    // const today = dayjs();
     dayjs.extend(utc)
     dayjs.extend(timezone);
-    // const { register, handleSubmit } = useForm();
 
     const params = useParams()
     const form = useForm<FormInput>(
@@ -82,17 +51,6 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
             const res = await axios.patch(`http://localhost:3000/api/v1/employee/${params.id}`, data)
 
             console.log(res)
-            // setValues({
-            //     firstname: res.data.firstname,
-            //     lastname: res.data.lastname,
-            //     sex: res.data.sex,
-            //     birth: res.data.birth,
-            //     address: res.data.address,
-            //     subDistrict: res.data.subDistrict,
-            //     district: res.data.district,
-            //     province: res.data.province,
-            //     idCardExp: res.data.idCardExp
-            // })
             setIsDisable(true)
             setOpenSuccessNotify()
         } catch (error) {
@@ -138,7 +96,6 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
             >
 
                 <TextField
-                    // value={getValues("firstname")}
                     disabled={isDisable}
                     error={!!errors.firstname}
                     helperText={errors.firstname ? "Please insert firstname" : null}
@@ -156,7 +113,6 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                     InputLabelProps={{ shrink: true }}
                 />
                 <TextField
-                    // value={getValues('lastname')}
                     disabled={isDisable}
                     error={!!errors.lastname}
                     placeholder='นามสกุล'
@@ -172,11 +128,9 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                     InputLabelProps={{ shrink: true }}
                 />
 
-                {/* <TextField required className='eachInput' id="sex" label="เพศ" variant="outlined" /> */}
                 <FormControl
                     className='eachInput'
                     error={!!errors.sex}
-                    // defaultValue={getValues('sex')}
                     disabled={isDisable}
                 >
                     <InputLabel
@@ -210,7 +164,7 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                         timezone='Asia/Bangkok'
                         required
                         {...register(`birth`, {
-                            required: false
+                            required: true
                         })}
                         value={dayjs(getValues('birth'))}
                         onChange={e => setDates(e)}
@@ -229,7 +183,7 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                     variant="outlined"
                     error={!!errors.address}
                     helperText={errors.address ? "Please insert your address" : null}
-                    {...register('address', { required: "Address is required", pattern: addressPattern })}
+                    {...register('address', { required: true, pattern: addressPattern })}
                     InputLabelProps={{ shrink: true }}
                 />
                 <TextField
@@ -242,7 +196,7 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                     placeholder='ตำบล'
                     error={!!errors.subDistrict}
                     helperText={errors.subDistrict ? "Please insert your sub-district" : null}
-                    {...register('subDistrict', { required: "Sub-district is required", pattern: addressPattern })}
+                    {...register('subDistrict', { required: true, pattern: addressPattern })}
                     InputLabelProps={{ shrink: true }}
                 />
                 <TextField
@@ -255,7 +209,7 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                     placeholder='อำเภอ'
                     error={!!errors.district}
                     helperText={errors.district ? "Please insert your district" : null}
-                    {...register('district', { required: "District is required", pattern: addressPattern })}
+                    {...register('district', { required: true, pattern: addressPattern })}
                     InputLabelProps={{ shrink: true }}
                 />
                 <TextField required
@@ -267,7 +221,7 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                     placeholder='จังหวัด'
                     error={!!errors.province}
                     helperText={errors.province ? "Please insert your province" : null}
-                    {...register('province', { required: "Province is required", pattern: addressPattern })}
+                    {...register('province', { required: true, pattern: addressPattern })}
                     InputLabelProps={{ shrink: true }}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -280,7 +234,7 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                         format='YYYY-MM-DD'
                         timezone='Asia/Bangkok'
                         {...register('idCardExp', {
-                            required: false
+                            required: true
                         })}
                         value={dayjs(getValues('idCardExp'))}
                         onChange={e => setExpDate(e)}

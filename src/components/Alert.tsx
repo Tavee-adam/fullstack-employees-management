@@ -21,7 +21,6 @@ const Alerts = ({ isOpen, text, type }: Props) => {
 
     useEffect(() => {
         isOpen ? setOpen(true) : setOpen(false)
-        console.log(isOpen)
     }, [isOpen])
 
     useEffect(() => { }, [])

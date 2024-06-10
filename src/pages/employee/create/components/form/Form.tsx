@@ -1,5 +1,5 @@
 import './style/form.css'
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { TextField, Box, Button, FormControl, FormHelperText, Select, SelectChangeEvent, MenuItem, InputLabel } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -9,21 +9,11 @@ import { useForm } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import buddhistEra from "dayjs/plugin/buddhistEra";
 import axios from 'axios';
-type FormInput = {
-    firstname: string;
-    lastname: string;
-    sex: string;
-    birth: string | null;
-    address: string;
-    subDistrict: string;
-    district: string;
-    province: string;
-    idCardExp: string;
-}
+import { FormInput } from './constants/type'
+import { namePattern, addressPattern } from './constants/const'
 
-export const namePattern = /^[a-zA-Zก-ฮ]+$/;
-export const addressPattern = /^[a-zA-Zก-ฮ0-9\s,.-@]+$/;
 
 const Form = () => {
     const [sex, setSex] = useState('');
@@ -32,7 +22,7 @@ const Form = () => {
     const today = dayjs();
     dayjs.extend(utc)
     dayjs.extend(timezone);
-    // const { register, handleSubmit } = useForm();
+    dayjs.extend(buddhistEra);
     const form = useForm<FormInput>(
         {
             defaultValues: {
@@ -54,9 +44,7 @@ const Form = () => {
         try {
             data.birth = dates!.locale('th').format('YYYY-MM-DD')
             data.idCardExp = expDate!.locale('th').format('YYYY-MM-DD')
-            console.log(data, ",,,,,")
             const res = await axios.post('http://localhost:3000/api/v1/employee/', data)
-
             console.log(res)
         } catch (error) {
             console.log(error)
@@ -66,7 +54,6 @@ const Form = () => {
 
     }
 
-    useEffect(() => { console.log(dates) }, [dates])
     return (
         <>
             <h2 className='headerCreationForm'>เพิ่มข้อมูลผนักงานใหม่</h2>
@@ -81,13 +68,12 @@ const Form = () => {
                 <TextField
                     error={!!errors.firstname}
                     helperText={errors.firstname ? "Please insert firstname" : null}
-                    required {...register('firstname', { required: "Firstname is required", pattern: namePattern })} className='eachInput' id="firstname" label="ชื่อ" variant="outlined" />
+                    required {...register('firstname', { required: true, pattern: namePattern })} className='eachInput' id="firstname" label="ชื่อ" variant="outlined" />
                 <TextField error={!!errors.lastname}
                     helperText={errors.lastname ? "Please insert lastname" : null}
-                    required {...register('lastname', { required: "Lastname is required", pattern: namePattern })}
+                    required {...register('lastname', { required: true, pattern: namePattern })}
                     className='eachInput' id="lastname" label="นามสกุล" variant="outlined" />
 
-                {/* <TextField required className='eachInput' id="sex" label="เพศ" variant="outlined" /> */}
                 <FormControl
                     className='eachInput'
                     error={!!errors.sex}
@@ -111,7 +97,6 @@ const Form = () => {
                     {!!errors.sex && <FormHelperText>Please select</FormHelperText>}
                 </FormControl>
 
-                {/* <TextField required className='eachInput' id="birth" label="ว/ด/ป เกิด" variant="outlined" /> */}
 
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -125,14 +110,9 @@ const Form = () => {
                         value={dates}
                         required
                         {...register(`birth`, {
-                            required: false
+                            required: true
                         })}
                         onChange={e => setDates(e)}
-
-
-
-
-
                     />
 
                 </LocalizationProvider>
@@ -145,7 +125,7 @@ const Form = () => {
                     variant="outlined"
                     error={!!errors.address}
                     helperText={errors.address ? "Please insert your address" : null}
-                    {...register('address', { required: "Address is required", pattern: addressPattern })} />
+                    {...register('address', { required: true, pattern: addressPattern })} />
                 <TextField required
                     className='eachInput'
                     id="subDistrict"
@@ -153,7 +133,7 @@ const Form = () => {
                     variant="outlined"
                     error={!!errors.subDistrict}
                     helperText={errors.subDistrict ? "Please insert your sub-district" : null}
-                    {...register('subDistrict', { required: "Sub-district is required", pattern: addressPattern })}
+                    {...register('subDistrict', { required: true, pattern: addressPattern })}
                 />
                 <TextField required
                     className='eachInput'
@@ -162,7 +142,7 @@ const Form = () => {
                     variant="outlined"
                     error={!!errors.district}
                     helperText={errors.district ? "Please insert your district" : null}
-                    {...register('district', { required: "District is required", pattern: addressPattern })}
+                    {...register('district', { required: true, pattern: addressPattern })}
                 />
                 <TextField required
                     className='eachInput'
@@ -171,7 +151,7 @@ const Form = () => {
                     variant="outlined"
                     error={!!errors.province}
                     helperText={errors.province ? "Please insert your province" : null}
-                    {...register('province', { required: "Province is required", pattern: addressPattern })}
+                    {...register('province', { required: true, pattern: addressPattern })}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -183,7 +163,7 @@ const Form = () => {
                         timezone='Asia/Bangkok'
                         value={expDate}
                         {...register('idCardExp', {
-                            required: false
+                            required: true
                         })}
                         onChange={e => setExpDate(e)}
                     />

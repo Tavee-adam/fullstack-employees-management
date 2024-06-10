@@ -1,28 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './style/style.css'
 import { Paper } from '@mui/material';
-
 import { DataGrid, GridColDef, GridToolbar, GridLogicOperator, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import dayjs from 'dayjs';
-
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import buddhistEra from "dayjs/plugin/buddhistEra";
+import "dayjs/locale/th";
 import axios from 'axios';
 import { FormInput } from '../types/employeeType'
 import { useNavigate } from "react-router-dom";
-
 const List = () => {
 
   const [rows, setRows] = useState<FormInput[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate();
+
+
   const handleDeleteClick = (id: string | number) => () => {
     setIsLoading(true);
     axios.delete(`http://localhost:3000/api/v1/employee/${id}`).then(res => {
-      console.log(res.data);
       if (!res.data.id) {
-        console.log(res.data)
         setIsLoading(false);
         setRows(rows.filter((row) => row.id !== id));
       } else {
@@ -44,21 +43,19 @@ const List = () => {
   }
 
 
-  const options = [{ label: 'มกราคม', value: 'มกราคม' }, { label: 'กุมภาพันธ์', value: 'กุมภาพันธ์' }, { label: 'มีนาคม', value: 'มีนาคม' },
-  { label: 'เมษายน', value: 'เมษายน' }, { label: 'พฤษภาคม', value: 'พฤษภาคม' }, { label: 'มิถุนายน', value: 'มิถุนายน' },
-  { label: 'กรกฎาคม', value: 'กรกฎาคม' }, { label: 'สิงหาคม', value: 'สิงหาคม' }, { label: 'กันยายน', value: 'กันยายน' },
-  { label: 'ตุลาคม', value: 'ตุลาคม' }, { label: 'พฤศจิกายน', value: 'พฤศจิกายน' }, { label: 'ธันวาคม', value: 'ธันวาคม' }]
 
-  const birthDateConvertToBirthMonth = (value: string) => {
-    const day = dayjs(value);
-    const date = day.date()
-    const monthIndex: number = day.month()
-    const year = day.year()
 
-    const newValue = `${date} ${options[monthIndex].label} ${year}`
+  const birthDateStringForm = (value: string) => {
+    dayjs.extend(buddhistEra);
+    dayjs.locale("th");
+    const day = dayjs(value).format("DD MMMM BBBB");
+    // const date = day.date()
+    // const monthIndex: number = day.month()
+    // const year = day.year()
 
-    // console.log(newValue)
-    return newValue
+    // const newValue = `${date} ${options[monthIndex].label} ${year}`
+
+    return day
 
   }
 
@@ -88,13 +85,11 @@ const List = () => {
     if (isPass) {
       // ยังไม่หมดอายุ
       const differ = dayjs(date).diff(today, 'day');
-      console.log('<<<< 34', isPass, returnBoolean, differ)
       return [isPass, returnBoolean, differ];
 
     } else {
       // บัตรหมดแล้ว
       const differ = dayjs(today).diff(date, 'day');
-      console.log('<<<< 40', isPass, returnBoolean, differ)
 
       return [isPass, returnBoolean, differ];
 
@@ -126,7 +121,7 @@ const List = () => {
       description: 'This column has a value getter and is not sortable.',
       sortable: true,
       width: 160,
-      valueGetter: (value, row) => birthDateConvertToBirthMonth(row.birth),
+      valueGetter: (value, row) => birthDateStringForm(row.birth),
       type: "string",
     },
     {
@@ -135,7 +130,8 @@ const List = () => {
       description: 'This column has a value getter and is not sortable.',
       sortable: false,
       filterable: false,
-      width: 160,
+      width: 160,//birthDateStringForm
+      valueGetter: (value, row) => birthDateStringForm(row.idCardExp),
 
     },
     {
@@ -178,36 +174,12 @@ const List = () => {
           icon={<DeleteIcon />}
           label="Delete"
           onClick={handleDeleteClick(params.id)}
-        // showInMenu
         />,
       ],
     },
   ];
 
-  const rowss = [
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "1", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "2", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "3", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "4", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "5", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "6", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "7", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "8", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "9", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "10", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "11", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "12", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "13", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "14", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "15", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "16", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "17", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "18", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "19", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "20", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
-    { address: "sdfg", birth: "2024-06-09", district: "sdfg", firstname: "dszf", id: "21", idCardExp: "2024-06-09", lastname: "dsfg", province: "sdfg", sex: "male", subDistrict: "dsfg" },
 
-  ];
 
 
 
@@ -215,15 +187,24 @@ const List = () => {
 
   useEffect(() => {
     const getAllEmployee = async () => {
-      setIsLoading(true)
-      const res = await axios.get('http://localhost:3000/api/v1/employee/')
+      try {
+        setIsLoading(true)
+        const res = await axios.get('http://localhost:3000/api/v1/employee/')
 
 
-      console.log(res.data)
-      if (res.data) {
-        setRows(res.data)
+        if (res.data) {
+          setRows(res.data)
+          setIsLoading(false)
+        }
+        if (!res) {
+          setRows([])
+          setIsLoading(false)
+        }
+      } catch (error) {
+        setRows([])
         setIsLoading(false)
       }
+
 
     }
     getAllEmployee()
@@ -262,5 +243,3 @@ const List = () => {
 }
 
 export default List
-
-/* ลำดับ ,ชื่อ,สกุล,เพศ ที่อยู่ คำนวนอายุ วันเดือนปีเกิด วันบัตรหมดอายุ สถานะบัตร การจัดการ  */

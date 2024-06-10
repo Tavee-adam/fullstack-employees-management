@@ -22,7 +22,6 @@ const Nav = () => {
 
         <Link className={location.pathname === '/create' ? 'thisLink' : 'link'} to={"/create"}>เพิ่ม</Link>
 
-        {/* <Link className={location.pathname === '/list' ? 'link' : 'thisLink'} to={"/update/2"}>แก้ไขข้อมูล</Link> */}
 
 
 
