@@ -9,3 +9,8 @@ export type FormInput = {
   province: string;
   idCardExp: string;
 };
+
+export interface Props {
+  setOpenSuccessNotify: () => void;
+  setOpenFailedNotify: () => void;
+}

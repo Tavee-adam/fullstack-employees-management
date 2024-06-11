@@ -13,13 +13,15 @@ import buddhistEra from "dayjs/plugin/buddhistEra";
 import axios from 'axios';
 import { FormInput } from './constants/type'
 import { namePattern, addressPattern } from './constants/const'
+import { Props } from './constants/type';
+import { useNavigate } from 'react-router-dom';
 
-
-const Form = () => {
+const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
     const [sex, setSex] = useState('');
     const [dates, setDates] = useState<Dayjs | null>(dayjs())
     const [expDate, setExpDate] = useState<Dayjs | null>(dayjs())
     const today = dayjs();
+    const navigation = useNavigate()
     dayjs.extend(utc)
     dayjs.extend(timezone);
     dayjs.extend(buddhistEra);
@@ -44,11 +46,17 @@ const Form = () => {
         try {
             data.birth = dates!.locale('th').format('YYYY-MM-DD')
             data.idCardExp = expDate!.locale('th').format('YYYY-MM-DD')
-            const endpoint = import.meta.env.VITE_API;
+            const endpoint = import.meta.env.VITE_API
             const res = await axios.post(endpoint, data)
+            setOpenSuccessNotify()
             console.log(res)
+            setTimeout(() => {
+                navigation('/list')
+            }, 1200)
+
         } catch (error) {
             console.log(error)
+            setOpenFailedNotify
         }
 
 
@@ -57,7 +65,7 @@ const Form = () => {
 
     return (
         <>
-            <h2 className='headerCreationForm'>เพิ่มข้อมูลผนักงานใหม่</h2>
+            <h2 data-testId className='headerCreationForm'>เพิ่มข้อมูลผนักงานใหม่</h2>
             <Box
                 className='formBox'
                 component="form"
@@ -67,10 +75,14 @@ const Form = () => {
             >
 
                 <TextField
+                    // data-testid="firstname"
+                    inputProps={{ "data-testid": "firstname" }}
                     error={!!errors.firstname}
                     helperText={errors.firstname ? "Please insert firstname" : null}
                     required {...register('firstname', { required: true, pattern: namePattern })} className='eachInput' id="firstname" label="ชื่อ" variant="outlined" />
                 <TextField error={!!errors.lastname}
+
+                    inputProps={{ "data-testid": "lastname" }}
                     helperText={errors.lastname ? "Please insert lastname" : null}
                     required {...register('lastname', { required: true, pattern: namePattern })}
                     className='eachInput' id="lastname" label="นามสกุล" variant="outlined" />
@@ -86,6 +98,7 @@ const Form = () => {
                         {...register('sex', { required: "Sex is required" })}
                         labelId="demo-simple-select-label"
                         id="sex"
+                        inputProps={{ "data-testid": "sex" }}
                         value={sex}
                         label="เพศ"
                         onChange={(e: SelectChangeEvent) => setSex(e.target.value as string)}
@@ -103,6 +116,8 @@ const Form = () => {
                     <DatePicker
                         className='eachInput'
                         defaultValue={today}
+                        // inputProps={{ "data-testid": "testbirth" }}
+
                         disableFuture
                         label="วันเกิด"
                         views={['year', 'month', 'day']}
@@ -123,6 +138,7 @@ const Form = () => {
                     className='eachInput'
                     id="address"
                     label="ที่อยู่"
+                    inputProps={{ "data-testid": "address" }}
                     variant="outlined"
                     error={!!errors.address}
                     helperText={errors.address ? "Please insert your address" : null}
@@ -131,6 +147,7 @@ const Form = () => {
                     className='eachInput'
                     id="subDistrict"
                     label="ตำบล"
+                    inputProps={{ "data-testid": "subdistrict" }}
                     variant="outlined"
                     error={!!errors.subDistrict}
                     helperText={errors.subDistrict ? "Please insert your sub-district" : null}
@@ -139,6 +156,7 @@ const Form = () => {
                 <TextField required
                     className='eachInput'
                     id="district"
+                    inputProps={{ "data-testid": "districts" }}
                     label="อำเภอ"
                     variant="outlined"
                     error={!!errors.district}
@@ -148,6 +166,7 @@ const Form = () => {
                 <TextField required
                     className='eachInput'
                     id="province"
+                    inputProps={{ "data-testid": "province" }}
                     label="จังหวัด"
                     variant="outlined"
                     error={!!errors.province}
@@ -156,12 +175,18 @@ const Form = () => {
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+
                         className='eachInput'
                         defaultValue={today}
+                        // inputProps={{  }}
+                        // slots={{
+                        //     "data-testid": "exp"
+                        // }}
                         label="บัตรประชาชนหมดอายุ"
                         views={['year', 'month', 'day']}
                         format='YYYY-MM-DD'
                         timezone='Asia/Bangkok'
+
                         value={expDate}
                         {...register('idCardExp', {
                             required: false
@@ -169,7 +194,7 @@ const Form = () => {
                         onChange={e => setExpDate(e)}
                     />
                 </LocalizationProvider>
-                <Button type="submit" className='submitButton' variant="contained" endIcon={<SendIcon />}>
+                <Button data-testid="btn" type="submit" className='submitButton' variant="contained" endIcon={<SendIcon />}>
                     Send
                 </Button>
             </Box ></>
