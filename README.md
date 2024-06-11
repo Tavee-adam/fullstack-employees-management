@@ -28,10 +28,12 @@ and Reactjs and Redux-Toolkit for state management
         5. pages : contains pages that display on the site including its components styles and logical funcitons.
 
 * Pages inside src/pages/employee : there are 3 folders which are the main pages
-  1. list 
-  2. create
-  3. update
+  1. list : contain table data grid of employee in system and also a scv exporting function , detele function.
+  2. create : for create employee.
+  3. update : for update employee information.
   
+
+
 
 
 
