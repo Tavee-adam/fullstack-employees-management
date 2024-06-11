@@ -195,9 +195,10 @@ const Form = ({ setOpenSuccessNotify, setOpenFailedNotify }: Props) => {
                     />
                 </LocalizationProvider>
                 <Button data-testid="btn" type="submit" className='submitButton' variant="contained" endIcon={<SendIcon />}>
-                    Send
+                    Submit
                 </Button>
-            </Box ></>
+            </Box >
+            </>
     )
 }
 

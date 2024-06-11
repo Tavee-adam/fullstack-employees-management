@@ -33,6 +33,7 @@
         flex-wrap: nowrap;
         padding: 5% ;
         height: 100%;
+        align-items: center;
     }
     .eachInput{
         margin: 5% 0 ;

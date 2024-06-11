@@ -33,19 +33,20 @@
         flex-wrap: nowrap;
         padding: 5% ;
         height: 100%;
+        align-items: center;
     }
     .eachInput{
         margin: 5% 0 ;
         width: 100%;
         height: 100px ;
-        margin: 2% 0;
+        /* margin: 2% 0; */
     }
     
     .submitButton{
-        margin: 5% 0 ;
-        width: 40%;
-        height: 50px ;
-        margin: 2% 0;
+        /* margin: 5% 0 ; */
+        width: 100px;
+        height: 100px ;
+        /* margin: 2% 0; */
     }
     .headerCreationForm{
         color : var(--light-cold-4);
